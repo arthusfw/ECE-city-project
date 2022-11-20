@@ -92,3 +92,125 @@ void affichepopulation()
     itoa(population,pop,10);
     textout_ex(screen,font,pop,912,104,makecol(255,0,0),makecol(180,180,0));
 }
+
+void posebati(int type)
+{
+    int xm,ym,xh,yh,xs,ys;
+    int cout;
+    int bon; // O au début du test, 1 si bonne position, 2 si connexité possible
+    int li,co;
+    switch (type)
+    {
+    case 1 :
+        cout=10;
+        xh=1;
+        yh=1;
+        strcpy(chaine,"route");
+        break;
+    case 2 :
+        cout=100000;
+        xh=4;
+        yh=6;
+        strcpy(chaine,"chateau d'eau");
+        break;
+    case 3 :
+        cout=100000;
+        xh=4;
+        yh=6;
+        strcpy(chaine,"centrale electrique");
+        break;
+    case 4 :
+        cout=1000;
+        xh=3;
+        yh=3;
+        strcpy(chaine,"habitation");
+        break;
+    }
+    rectangle(100,705,80,7,0,makecol(180,180,0));
+    textout_ex(screen,font,"Pose sur le plateau d'un element",102,707,makecol(100,100,255),makecol(180,180,0));
+    textout_ex(screen,font,"chaine",364,707,makecol(100,100,255),makecol(180,180,0));
+
+    while ((mouse_x>=919-xh*20) || (mouse_y>=719-yh*20)) {} // attente que la souris soit dans la zone jeu permettant de poser un bâtiment
+    textout_ex(screen,font,"Cliquer pour poser de manière connexe.",102,717,makecol(100,100,255),makecol(180,180,0));
+    textout_ex(screen,font,"Fin de pose en sortant du plateau",102,727,makecol(100,100,255),makecol(180,180,0));
+
+    while (((mouse_x<919-xh*20) && (mouse_y<719-yh*20) && (capital>=cout)) && ((clock()-dchrono)/1000.<tmax)) // tant que la souris reste dans la zone jeu et assez d'argent
+
+    {
+       affichechrono();
+       xs=mouse_x/20;
+        ys=mouse_y/20;
+
+        blit(screen,page,xs*20,ys*20,0,0,xh*20,yh*20);
+       // attente(5);
+        switch (type)
+        {
+        case 1 : blit(route,screen,0,0,xs*20,ys*20,20,20); break;
+        case 2 : blit(eau,screen,0,0,xs*20,ys*20,80,120); break;
+        case 3 : blit(elec,screen,0,0,xs*20,ys*20,80,120); break;
+        case 4 : blit(hab[0],screen,0,0,xs*20,ys*20,60,60); break;
+        }
+        attente(60);
+        blit(page,screen,0,0,xs*20,ys*20,xh*20,yh*20);
+        attente(3);
+
+        if(mouse_b & 2) // si double clic
+        {
+           xm=mouse_x/20; //converti les coordonnées souris en coordonnées plateau
+           ym=mouse_y/20;
+            bon=1;
+            for (co=0; co<xh; co++) // test si place suffisante
+                for(li=0; li<yh; li++)
+                    if (plateau[ym+li][xm+co]!=-1) bon=0; // si la case n'est pas vide pose impossible
+            //test de la convexité
+            if (bon==1)
+            {
+                for (co=0; co<xh; co++)
+                {
+                    if (ym>0) if (plateau[ym-1][xm+co]==0) bon=2; //par le haut
+                    if (ym+yh<35) if (plateau[ym+yh][xm+co]==0) bon=2; // par le bas
+                }
+                for (li=0; li<yh; li++)
+                {
+                    if (xm>0) if (plateau[ym+li][xm-1]==0) bon=2; // par la gauche
+                    if (xm+xh<45) if (plateau[ym+li][xm+xh]==0) bon=2; // par la droite
+                }
+                if (bon==2)
+                {
+                    //ajouter le point de connexion si type >1
+                    for (co=0; co<xh; co++)
+                        for(li=0; li<yh; li++)
+                            plateau[ym+li][xm+co]=type-1; // marque les cases occupées du plateau par type-1
+                    switch (type)
+                    {
+                    case 1 :
+                        blit(route,screen,0,0,20*xm, 20*ym,20,20);
+                        break;
+                    case 2 :
+                        blit(eau,screen,0,0,20*xm, 20*ym,80,120); // dessine l'objet
+                        // mise à jour des chateaux d'eau
+                        tabeaux[nbeau].xh=xm; //
+                        tabeaux[nbeau].yh=ym; //
+                        nbeau++;
+                        break;
+                    case 3 :
+                        blit(elec,screen,0,0,20*xm, 20*ym,80,120);
+                        tabelec[nbelec].xh=xm;
+                        tabelec[nbelec].yh=ym;
+                        nbelec++;
+                        break;
+                    case 4 :
+                        blit(hab[0],screen,0,0,20*xm, 20*ym,60,60);
+                        tabhab[nbhab].xh=xm;
+                        tabhab[nbhab].yh=ym;
+                        etathab[nbhab]=0;
+                        nbhab++;
+                        break;
+                    }
+                    capital-=cout; //mise à jour argent
+                    affichecapital();
+                }
+            } // fin position bonne
+        } // fin clic
+    } // fin while
+}
