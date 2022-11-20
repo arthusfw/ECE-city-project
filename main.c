@@ -51,3 +51,10 @@ page = load_bitmap("eau.bmp",NULL);
     buche = load_bitmap("buche.bmp", NULL);
     return;
 }
+
+void affichechrono() // revoir position
+{
+    rectangle(950,28,5,1,0,0);
+    itoa((int)(tmax-(clock()-dchrono)/1000.+0.1),chaine,10);
+    textout_ex(screen,font,chaine,970,28,makecol(255,0,0),makecol(0,0,0));
+}
