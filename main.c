@@ -86,3 +86,28 @@ int choixmenu(int min, int max) // revoir position
     while (k==0);
     return k;
 }
+
+void evolution()  //actuellement en mode capitaliste
+{
+    int i, pmax;
+    // selon mode  à faire
+    if (nbelec*nbeau>0) // il y a au moins une centrale elec et un château d'eau
+        if (mode==1) // mode capitaliste : toutes les habitations évoluent indépendemment des conditions
+        {
+        for (i=0; i<nbhab; i++)
+            if (etathab[i]<4)
+            {
+                etathab[i]++;
+                blit(hab[etathab[i]],screen,0,0,20*(tabhab[i].xh), 20*(tabhab[i].yh),60,60);
+            }
+        }
+        else // mode communiste
+        {
+        if (nbelec>nbeau) // calcul de population maximale possible en fonction du nombre de centrale ou de château d'eau
+            pmax= nbeau*5000;
+            else pmax=nbelec*5000;
+
+        }
+    affichepopulation();// mettre à jour population
+}
+
