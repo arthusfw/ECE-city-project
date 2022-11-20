@@ -55,3 +55,15 @@ void initialisation() //défini les modes graphiques, la souris et charge les im
     //terrainvide();
     return;
 }
+
+void rectangle(int xc, int yc, int nbx,int nby, int col, int colfond)
+// des rectangle   origine           taille x8?         couleur
+{
+    int k;
+    char chaine2[80];
+    strcpy(chaine2,"");
+    for(k=0; k<nbx; k++) strcat(chaine2," ");
+    for(k=0; k<nby; k++)
+        textout_ex(screen,font,chaine2,xc,yc+8*k,col,colfond);
+    return;
+}
