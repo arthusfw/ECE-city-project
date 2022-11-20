@@ -67,3 +67,22 @@ void rectangle(int xc, int yc, int nbx,int nby, int col, int colfond)
         textout_ex(screen,font,chaine2,xc,yc+8*k,col,colfond);
     return;
 }
+
+int choixmenu(int min, int max) // revoir position
+//ok retourne le nombre cliqué dans le menu entre min et max
+{
+    int k,xm,ym;
+    k=0;
+    do
+    {
+        if(mouse_b & 2)
+        {
+            xm=mouse_x;
+            ym=mouse_y;
+            if ((xm>=905) && (xm<929) && (ym>=200+60*min) && (ym<224+60*max) && ((ym-200)%60)<24) // bonne dimension horizontale, verticale,
+                k=(ym-200)/60;
+        }
+    }
+    while (k==0);
+    return k;
+}
