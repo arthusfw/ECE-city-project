@@ -36,3 +36,22 @@ int main()
     return 0;
 }
 END_OF_MAIN();
+
+void initialisation() //défini les modes graphiques, la souris et charge les images
+{
+//éléments techniques
+    allegro_init();
+    //install_keyboard();  //utile ?
+    install_mouse();
+    set_color_depth(32);
+    set_uformat(U_ASCII);
+    if(set_gfx_mode(GFX_AUTODETECT_WINDOWED, 1024, 768, 0, 0)!=0) //Taille écran en  mettre 1078
+        ERREUR(allegro_error);
+//initialiser le drawing mode(alpha channel blend)
+    drawing_mode(DRAW_MODE_TRANS, NULL, 0, 0);
+    set_write_alpha_blender();
+    //srand(time(NULL)); // initialise nb aléa
+    image(); // chargement des images
+    //terrainvide();
+    return;
+}
