@@ -1,4 +1,13 @@
-#include <stdio.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+#include <allegro.h>
+#include <allegro_native_dialog.h>
+
+
+#define ERREUR(msg){\
+
+
 
 int main()
 {
