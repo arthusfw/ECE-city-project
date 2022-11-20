@@ -58,3 +58,37 @@ void affichechrono() // revoir position
     itoa((int)(tmax-(clock()-dchrono)/1000.+0.1),chaine,10);
     textout_ex(screen,font,chaine,970,28,makecol(255,0,0),makecol(0,0,0));
 }
+
+void affichecapital()
+{
+    char cap[10];
+    rectangle(902,64,14,1,makecol(0,0,0),makecol(180,180,0));
+    itoa(capital,cap,10);
+    textout_ex(screen,font,cap,912,64,makecol(255,0,0),makecol(180,180,0));
+}
+
+void affichepopulation()
+{
+    char pop[10];
+    int i;
+    population=0;
+    for (i=0; i<nbhab; i++)
+        switch (etathab[i])
+        {
+        case 1 :
+            population+=10;
+            break;
+        case 2 :
+            population+=50;
+            break;
+        case 3 :
+            population+=100;
+            break;
+        case 4 :
+            population+=1000;
+            break;
+        }
+    rectangle(902,104,14,1,makecol(0,0,0),makecol(180,180,0));
+    itoa(population,pop,10);
+    textout_ex(screen,font,pop,912,104,makecol(255,0,0),makecol(180,180,0));
+}
